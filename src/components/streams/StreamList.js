@@ -7,6 +7,16 @@ const StreamList = (props) => {
     props.fetchStreams();
   }, []);
 
+  const renderAdminButtons = (stream) => {
+    if (props.currentUserId === stream.userId) {
+      return (
+        <div>
+          {/*  button container as a styled component*/}
+          <Button>Delete</Button> <Button>Edit</Button>
+        </div>
+      );
+    }
+  };
   const renderList = () => {
     return props.streams.map((stream) => {
       return (
@@ -16,6 +26,7 @@ const StreamList = (props) => {
             <h2>{stream.title}</h2>
             <h3>{stream.description}</h3>
           </ListContainer>
+          {renderAdminButtons(stream)}
         </ListElement>
       );
     });
@@ -30,7 +41,10 @@ const StreamList = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { streams: Object.values(state.streams) };
+  return {
+    streams: Object.values(state.streams),
+    currentUserId: state.auth.userId,
+  };
 };
 export default connect(mapStateToProps, { fetchStreams })(StreamList);
 
@@ -42,12 +56,12 @@ const Container = styled.div`
   cursor: pointer;
   padding: 15px;
   word-break: break-word;
-  > h1 {
+  /* > h1 {
     padding-top: 20px;
     margin-left: 8rem;
     margin-bottom: 0;
     place-self: flex-start;
-  }
+  } */
 `;
 const List = styled.ul`
   list-style-type: none;
@@ -83,4 +97,13 @@ const ListContainer = styled.div`
     font-size: 1.1rem;
     color: #3b3b3878;
   }
+`;
+
+const Button = styled.button`
+  /* Adapt the colors based on primary prop */
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  border: 2px solid #94d2bd;
+  border-radius: 3px;
 `;
