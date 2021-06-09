@@ -7,7 +7,8 @@ import {
   DELETE_STREAM,
   EDIT_STREAM,
 } from './types';
-
+/* import { useHistory } from 'react-router-dom'; */
+import history from '../utils/history';
 import streams from '../APIs/streams';
 
 export const signIn = (userId) => {
@@ -30,6 +31,10 @@ export const createStream = (formValues) => async (dispatch, getState) => {
     type: CREATE_STREAM,
     payload: response.data,
   });
+  //TODO do some programmatic navigation to go back to root
+  history.push('/');
+  /*  let history = useHistory();
+  history.push('/'); */
 };
 
 export const fetchStreams = () => async (dispatch) => {
