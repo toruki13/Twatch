@@ -3,8 +3,9 @@ import { useEffect } from 'react';
 import { fetchStreams } from '../../actions';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import { AtomSpinner } from 'react-epic-spinners'
+import { AtomSpinner } from 'react-epic-spinners';
 
 // In your render function or SFC return
 
@@ -17,15 +18,13 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
     if (currentUserId === stream.userId) {
       return (
         <ButtonContainer>
-          {/*  button container as a styled component*/}
-          <Button style={{ color: 'red', borderColor: 'red' }}>
-            Delete
-          </Button>{' '}
           <Button>Edit</Button>
+          <RedButton>Delete</RedButton>{' '}
         </ButtonContainer>
       );
     }
   };
+
   const renderList = () => {
     return streams.map((stream) => {
       return (
@@ -45,18 +44,19 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
     if (isSignedIn) {
       return (
         <Button>
-          <Link style={{ color: '#94d2bd', margin: '0' }} to='/streams/new'>
+          <Link style={{ color: 'white', margin: '0' }} to='/streams/new'>
             Create Stream
           </Link>
         </Button>
       );
     }
   };
+
   return (
     <div>
       <Container>
-      <AtomSpinner size="150" color="#94d2bd"></AtomSpinner>
-        <h1>Streams</h1>
+        <AtomSpinner size='120' color='#94d2bd'></AtomSpinner>
+        <h1 style={{ padding: 0, margin: 0 }}>Streams</h1>
         <List>{renderList()}</List>
         {renderCreateButton()}
       </Container>
@@ -91,7 +91,10 @@ const List = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0px 30px;
-  width: 50%;
+  width: 40%;
+  @media all and (max-width: 576px) {
+    width: 100%;
+  }
 `;
 
 const ListElement = styled.li`
@@ -111,6 +114,7 @@ const ListElement = styled.li`
 `;
 
 const ListContainer = styled.div`
+  width: 60%;
   > h2,
   h3 {
     margin: 0;
@@ -127,16 +131,41 @@ const ListContainer = styled.div`
 const Button = styled.button`
   /* Adapt the colors based on primary prop */
   cursor: pointer;
-  font-size: 1.5em;
-  margin-left: 2rem;
+  font-size: 1.3em;
+  margin-left: 1rem;
+  color: white;
+  background-color: #94d2bd;
+  border: none;
+  text-align: center;
+  border-radius: 10px;
   /*   margin: 1em; */
   /*   padding: 0.25em 1em; */
-  border: 2px solid #94d2bd;
   border-radius: 3px;
+  :hover {
+    color: #0fa371;
+    background-color: white;
+  }
+  :active {
+    color: white;
+    background-color: #94d2bd;
+  }
+`;
+
+const RedButton = styled(Button)`
+  color: white;
+  background-color: red;
+  :hover {
+    color: red;
+    background-color: white;
+  }
+  :active {
+    color: white;
+    background-color: red;
+  }
 `;
 
 const ButtonContainer = styled.div`
-  width: 60%;
+  width: 100%;
 
   display: flex;
   padding: 0;
