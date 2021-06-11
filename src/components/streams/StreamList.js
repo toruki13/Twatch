@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { fetchStreams } from '../../actions';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+/* import { useHistory } from 'react-router-dom'; */
 
 import { AtomSpinner } from 'react-epic-spinners';
 
@@ -11,14 +11,18 @@ import { AtomSpinner } from 'react-epic-spinners';
 
 const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
   useEffect(() => {
+    console.log('1 time');
     fetchStreams();
-  }, [null]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const renderAdminButtons = (stream) => {
     if (currentUserId === stream.userId) {
       return (
         <ButtonContainer>
-          <Button>Edit</Button>
+          <Button>
+            <Link to={`/streams/edit/${stream._id}`}>Edit</Link>
+          </Button>
           <RedButton>Delete</RedButton>{' '}
         </ButtonContainer>
       );
@@ -55,7 +59,7 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
   return (
     <div>
       <Container>
-        <AtomSpinner size='120' color='#94d2bd'></AtomSpinner>
+        <AtomSpinner size={120} color='#94d2bd'></AtomSpinner>
         <h1 style={{ padding: 0, margin: 0 }}>Streams</h1>
         <List>{renderList()}</List>
         {renderCreateButton()}
@@ -73,25 +77,21 @@ const mapStateToProps = (state) => {
 };
 export default connect(mapStateToProps, { fetchStreams })(StreamList);
 
+//#region STYLES
 const Container = styled.div`
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  /*  padding: 15px; */
   word-break: break-word;
-  /* > h1 {
-    padding-top: 20px;
-    margin-left: 8rem;
-    margin-bottom: 0;
-    place-self: flex-start;
-  } */
 `;
 const List = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0px 30px;
   width: 40%;
+  overflow-y: scroll;
+  height: 60vh;
   @media all and (max-width: 576px) {
     width: 100%;
   }
@@ -138,13 +138,8 @@ const Button = styled.button`
   border: none;
   text-align: center;
   border-radius: 10px;
-  /*   margin: 1em; */
-  /*   padding: 0.25em 1em; */
   border-radius: 3px;
-  :hover {
-    color: #0fa371;
-    background-color: white;
-  }
+
   :active {
     color: white;
     background-color: #94d2bd;
@@ -154,10 +149,6 @@ const Button = styled.button`
 const RedButton = styled(Button)`
   color: white;
   background-color: red;
-  :hover {
-    color: red;
-    background-color: white;
-  }
   :active {
     color: white;
     background-color: red;
@@ -178,3 +169,4 @@ const ButtonContainer = styled.div`
     flex-direction: column;
   }
 `;
+//#endregion
