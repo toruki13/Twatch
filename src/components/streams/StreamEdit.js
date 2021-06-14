@@ -1,30 +1,48 @@
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchStream } from '../../actions';
+import { fetchStream, editStream } from '../../actions';
 import { AtomSpinner } from 'react-epic-spinners';
-const StreamEdit = ({ match, stream, fetchStream }) => {
+import StreamForm from './StreamForm';
+
+const StreamEdit = ({ match, stream, fetchStream, editStream }) => {
   useEffect(() => {
-    console.log(stream);
     fetchStream(match.params.id);
-    console.log('streamFetched');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const onSubmit = (formValues) => {
+    console.log(match.params.id);
+    editStream(match.params.id, formValues);
+  };
 
   return (
     <div>
       {!stream ? (
         <AtomSpinner size={120} color='#94d2bd'></AtomSpinner>
       ) : (
-        stream.title
+        <div>
+          <h3 style={{ textAlign: 'center', paddingTop: '10%' }}>
+            Create Stream
+          </h3>
+          <StreamForm
+            initialValues={{
+              title: stream.title,
+              description: stream.description,
+            }}
+            onSubmit={onSubmit}
+          />
+        </div>
       )}
     </div>
   );
 };
 
-const mapStateToProps = (state, { match }) => {
+const mapStateToProps = (state, ownProps) => {
   return {
-    stream: state.streams[match.params.id],
+    stream: state.streams[ownProps.match.params.id],
   };
 };
 
-export default connect(mapStateToProps, { fetchStream })(StreamEdit);
+export default connect(mapStateToProps, { fetchStream, editStream })(
+  StreamEdit
+);

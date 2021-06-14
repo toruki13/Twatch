@@ -29,20 +29,18 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
     }
   };
 
-  const renderList = () => {
-    /* a function should be create inside the utils folders, and exported from the index.js from it there must be a better way tho*/
-    const sortedStreams = streams
-      .filter((a) => {
-        return a.userId === currentUserId;
+  const sortedStreams = streams
+    .filter((a) => {
+      return a.userId === currentUserId;
+    })
+    .reverse()
+    .concat(
+      streams.filter((a) => {
+        return a.userId !== currentUserId;
       })
-      .concat(
-        streams.filter((a) => {
-          return a.userId !== currentUserId;
-        })
-      );
-    /*   const sortedStream2 = streams.sort(
-      (a, b) => ((a.userId === currentUserId) === b.userId) === currentUserId
-    ); */
+    );
+
+  const renderList = () => {
     return sortedStreams.map((stream) => {
       return (
         <ListElement className='item' key={stream._id}>
