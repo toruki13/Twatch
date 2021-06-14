@@ -21,9 +21,11 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
       return (
         <ButtonContainer>
           <Button>
-            <Link to={`/streams/edit/${stream._id}`}>Edit</Link>
+            <Link style={{ color: 'white' }} to={`/streams/edit/${stream._id}`}>
+              Edit
+            </Link>
           </Button>
-          <RedButton>Delete</RedButton>{' '}
+          <RedButton>Delete</RedButton>
         </ButtonContainer>
       );
     }
