@@ -1,13 +1,11 @@
 import { connect } from 'react-redux';
 import { useEffect } from 'react';
-import { fetchStreams } from '../../actions';
+import { fetchStreams, deleteStream } from '../../actions';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-/* import { useHistory } from 'react-router-dom'; */
+import history from '../../utils/history';
 
 import { AtomSpinner } from 'react-epic-spinners';
-
-// In your render function or SFC return
 
 const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
   useEffect(() => {
@@ -16,7 +14,7 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderAdminButtons = (stream) => {
+  const renderAdminButtons = (stream, id) => {
     if (currentUserId === stream.userId) {
       return (
         <ButtonContainer>
@@ -25,7 +23,16 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
               Edit
             </Link>
           </Button>
-          <RedButton>Delete</RedButton>
+          <RedButton
+            onClick={(e) => {
+              history.push({
+                pathname: `/streams/delete/${id}`,
+                state: { stream: 23 },
+              });
+            }}
+          >
+            Delete
+          </RedButton>
         </ButtonContainer>
       );
     }
@@ -51,7 +58,7 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
             <h2>{stream.title}</h2>
             <h3>{stream.description}</h3>
           </ListContainer>
-          {renderAdminButtons(stream)}
+          {renderAdminButtons(stream, stream._id)}
         </ListElement>
       );
     });
@@ -88,7 +95,9 @@ const mapStateToProps = (state) => {
     isSignedIn: state.auth.isSignedIn,
   };
 };
-export default connect(mapStateToProps, { fetchStreams })(StreamList);
+export default connect(mapStateToProps, { fetchStreams, deleteStream })(
+  StreamList
+);
 
 //#region STYLES
 const Container = styled.div`
