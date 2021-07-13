@@ -5,8 +5,7 @@ const Header = () => {
   return (
     <Container>
       <Link to='/'>Strimio</Link>
-      <Link to='/StreamEdit'>All Streams</Link>
-      {/*      <Link>Login</Link> */}
+      <Link to='/'>All Streams</Link>
       <GoogleAuth />
     </Container>
   );
@@ -18,7 +17,6 @@ const Container = styled.div`
   font-family: 'Roboto', sans-serif;
   padding: 1rem;
   padding-bottom: 0.3rem;
-
   background-color: #94d2bd;
   display: flex;
   justify-content: space-between;

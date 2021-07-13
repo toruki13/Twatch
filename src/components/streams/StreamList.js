@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { fetchStreams, deleteStream } from '../../actions';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import history from '../../utils/history';
+/* import history from '../../utils/history'; */
 
 import { AtomSpinner } from 'react-epic-spinners';
 
@@ -24,14 +24,18 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
             </Link>
           </Button>
           <RedButton
-            onClick={(e) => {
+          /* onClick={(e) => {
               history.push({
                 pathname: `/streams/delete/${id}`,
-                state: { stream: 23 },
               });
-            }}
+            }} */
           >
-            Delete
+            <Link
+              style={{ color: 'white' }}
+              to={`/streams/delete/${stream._id}`}
+            >
+              delete
+            </Link>
           </RedButton>
         </ButtonContainer>
       );
@@ -55,7 +59,9 @@ const StreamList = ({ streams, currentUserId, isSignedIn, fetchStreams }) => {
         <ListElement className='item' key={stream._id}>
           <i className='large middle aligned icon camera' />
           <ListContainer>
-            <h2>{stream.title}</h2>
+            <Link className='header' to={`/streams/${stream._id}`}>
+              <h2>{stream.title}</h2>
+            </Link>
             <h3>{stream.description}</h3>
           </ListContainer>
           {renderAdminButtons(stream, stream._id)}

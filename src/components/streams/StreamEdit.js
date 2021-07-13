@@ -5,15 +5,14 @@ import { AtomSpinner } from 'react-epic-spinners';
 import StreamForm from './StreamForm';
 
 const StreamEdit = ({ match, stream, fetchStream, editStream }) => {
+  const id = match.params.id;
+
   useEffect(() => {
-    fetchStream(match.params.id);
+    fetchStream(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const onSubmit = (formValues) => {
-    console.log(match.params.id);
-    editStream(match.params.id, formValues);
-  };
+  const onSubmit = (formValues) => editStream(id, formValues);
 
   return (
     <div>

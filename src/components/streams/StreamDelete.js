@@ -1,8 +1,23 @@
 import Modal from '../Modal';
-import { deleteStream } from '../../actions';
+import { useEffect } from 'react';
+import { deleteStream, fetchStream } from '../../actions';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import history from '../../utils/history';
 
-const StreamDelete = ({ deleteStream, location, match }) => {
+const StreamDelete = ({ deleteStream, fetchStream, match, stream }) => {
+  //TODO Most Likely it would be much better to pop the delete modal without a route like method, so we save a couple of requests
+
+  let id = match.params.id;
+
+  useEffect(() => {
+    if (!stream) {
+      console.log('no stream useEffect will kick in', stream);
+      fetchStream(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onSubmit = (streamId) => {
     console.log(streamId);
     deleteStream(streamId);
@@ -10,27 +25,34 @@ const StreamDelete = ({ deleteStream, location, match }) => {
 
   const actions = (
     <>
-      <button
-        onClick={() => {
-          onSubmit(match.params.id);
-        }}
-        className='ui button negative'
-      >
+      <button onClick={() => onSubmit(id)} className='ui button negative'>
         Delete
       </button>
-      <button className='ui button '>Cancel</button>
+      {/*  <button onClick={() => history.push('/')} className='ui button '>
+        Cancel
+      </button> */}
+      <Link to='/' className='ui button '>
+        Cancel
+      </Link>
     </>
   );
   return (
-    <div>
-      <Modal
-        route='/'
-        header='Delete Stream'
-        content='Are you sure you want to delete this stream?'
-        actions={actions}
-      />
-    </div>
+    <Modal
+      onDismiss={(e) => history.push('/')}
+      route='/'
+      header={`Delete stream : ${stream?.title || ''}`}
+      content={`Are you sure you want to delete stream : ${
+        stream?.title || ''
+      }`}
+      actions={actions}
+    />
   );
 };
-
-export default connect(null, { deleteStream })(StreamDelete);
+const mapStateToProps = (state, ownProps) => {
+  return {
+    stream: state.streams[ownProps.match.params.id],
+  };
+};
+export default connect(mapStateToProps, { fetchStream, deleteStream })(
+  StreamDelete
+);
